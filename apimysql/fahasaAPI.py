@@ -5,7 +5,7 @@ import mysql.connector
 import os
 
 
-app = FastAPI()
+app = FastAPI(root_path="/api/db")
 
 
 # Cấu hình kết nối MySQL từ biến môi trường
