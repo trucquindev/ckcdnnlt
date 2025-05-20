@@ -1,0 +1,68 @@
+services:
+  mysql:
+    container_name: mysql
+    build: ./mysql
+    ports:
+      - '6603:3306'
+    expose:
+      - 3306
+
+  mysql_apifahasa:
+    container_name: mysql_api_container_fahasa
+    build: ./apimysql
+    ports:
+      - '9000:8002'
+    expose:
+      - 8002
+    environment:
+      - port=3306
+      - host=mysql
+    volumes:
+      - ./apimysql/fahasaAPI.py:/app/fahasaAPI.py
+      - fahasa_data:/app/data_Craw
+
+  data_crawl:
+    build: ./data_Crawl
+    ports:
+      - '8001:8001' # expose API
+    volumes:
+      - ./data_Crawl/landing_zone:/app/landing_zone
+    restart: always
+
+  data_ingestion:
+    container_name: data_ingestion_container
+    build: ./data_ingestion
+    volumes:
+      - fahasa_data:/app/data_Crawl
+    environment:
+      - TZ=Asia/Ho_Chi_Minh
+    depends_on:
+      - mysql_apifahasa
+
+  web:
+    container_name: web_container
+    build: ./web
+    ports:
+      - '9090:8080'
+    expose:
+      - 8080
+    volumes:
+      - fahasa_data:/app/data_Crawl
+    environment:
+      - TZ=Asia/Ho_Chi_Minh
+    depends_on:
+      - mysql_apifahasa
+
+  api_gateway:
+    container_name: api_gateway_container
+    build: ./gateway
+    ports:
+      - '8000:8000'
+    depends_on:
+      - data_crawl
+      - data_ingestion
+      - mysql_apifahasa
+
+volumes:
+  fahasa_data:
+    driver: local

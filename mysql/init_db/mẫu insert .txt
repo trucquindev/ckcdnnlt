@@ -1,0 +1,15 @@
+[
+  {
+    "product_id":"100001",
+    "name_a_title": "Bộ lắp ghép xe tăng",
+    "price": 400000,
+    "final_price": 350000,
+    "discount_percent": 12,
+    "hinh": "xe_tang.jpg",
+    "doTuoiSD": "6+",
+    "namSX": 2024,
+    "noiSX": "Nhật Bản",
+    "moTa": "Bộ lắp ghép sáng tạo chủ đề quân sự.",
+    "kichThuoc": "20x10x5cm"
+  }
+]
